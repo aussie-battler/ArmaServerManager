@@ -50,6 +50,7 @@
     <Compile Include="HttpServer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueryParameters.cs" />
     <Compile Include="ServerListStorageObject.cs" />
     <Compile Include="ServerManager.cs" />
     <Compile Include="ServerSchedule.cs" />

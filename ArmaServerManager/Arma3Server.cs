@@ -15,6 +15,9 @@ namespace ArmaServerManager
         public int GamePort;
         public string ServerProfileName = "arma3server";
         public string ExtraConfigLines = "";
+
+        public QueryParameters QueryParams = new QueryParameters();
+
         [NonSerialized]
         public ServerSchedule Schedules = new ServerSchedule();
 
