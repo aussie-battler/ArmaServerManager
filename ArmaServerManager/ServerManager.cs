@@ -152,6 +152,27 @@ namespace ArmaServerManager
                         return UpdateServerParamState(id, FindRequestValue(request, "param"), Convert.ToBoolean(FindRequestValue(request, "paramvalue")));
                     return "INVALID_SERVER_ID_DATATYPE";
 
+                case "updateport":
+                    try
+                    {
+                        FindServerByID(Convert.ToInt32(FindRequestValue(request, "serverid"))).GamePort = Convert.ToInt32(FindRequestValue(request,"paramvalue"));
+                        return "PORT_UPDATED";
+                    }
+                    catch (Exception)
+                    {
+                        return "INVALID_PORT_OR_SERVER_ID";
+                    }
+                case "updateprofilename":
+                    try
+                    {
+                        FindServerByID(Convert.ToInt32(FindRequestValue(request, "serverid"))).ServerProfileName = FindRequestValue(request, "paramvalue");
+                        return "PROFILENAME_UPDATED";
+                    }
+                    catch (Exception)
+                    {
+                        return "INVALID_SERVER_ID";
+                    }
+
                 case "startserver":
                     if (int.TryParse(FindRequestValue(request, "serverid"), out id))
                         return RestartServer(ServerManager.FindServerProcPairByID(id));
@@ -241,6 +262,7 @@ namespace ArmaServerManager
 
             return null;
         }
+
 
         private static string FindRequestValue(List<string[]> requestArray, string requestName)
         {
