@@ -213,6 +213,8 @@ namespace ArmaServerManager
                 serverInfo.Add("gametype", GetTagValue(serverInfo["flags"], ",t"));
                 serverInfo.Add("language", GetTagValue(serverInfo["flags"], ",g"));
                 serverInfo.Add("location", GetTagValue(serverInfo["flags"], ",c"));
+                serverInfo.Add("requiredversion", GetTagValue(serverInfo["flags"], ",r"));
+                serverInfo.Add("verifysignatures", GetTagValue(serverInfo["flags"], ",v"));
             }
             catch (Exception)
             {
