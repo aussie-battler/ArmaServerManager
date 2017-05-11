@@ -162,6 +162,28 @@ namespace ArmaServerManager
                     {
                         return "INVALID_PORT_OR_SERVER_ID";
                     }
+
+                case "updatequeryport":
+                    try
+                    {
+                        FindServerByID(Convert.ToInt32(FindRequestValue(request, "serverid"))).QueryParams.Port = Convert.ToInt32(FindRequestValue(request, "paramvalue"));
+                        return "QUERY_PORT_UPDATED";
+                    }
+                    catch (Exception)
+                    {
+                        return "INVALID_PORT_OR_SERVER_ID";
+                    }
+                case "updatequeryip":
+                    try
+                    {
+                        FindServerByID(Convert.ToInt32(FindRequestValue(request, "serverid"))).QueryParams.IPAddress = FindRequestValue(request, "paramvalue");
+                        return "QUERY_IP_UPDATED";
+                    }
+                    catch (Exception)
+                    {
+                        return "INVALID_IP_OR_SERVER_ID";
+                    }
+
                 case "updateprofilename":
                     try
                     {
@@ -187,6 +209,16 @@ namespace ArmaServerManager
                     if (int.TryParse(FindRequestValue(request, "serverid"), out id))
                         return ServerManager.GetServerDataByID(id);
                     return "INVALID_SERVER_ID_DATATYPE";
+
+                case "queryinfo":
+                    try
+                    {
+                        return new JavaScriptSerializer().Serialize(ServerManager.GetQueryInfo(FindServerByID(Convert.ToInt32(FindRequestValue(request, "serverid")))));
+                    }
+                    catch (Exception)
+                    {
+                        return "FAILED_TO_RECEIVE_QUERY_INFO";
+                    }
 
                 case "deletemission":
                     if (int.TryParse(FindRequestValue(request, "serverid"), out id))
@@ -298,6 +330,17 @@ namespace ArmaServerManager
 
             return data;
 
+        }
+
+        private static Dictionary<string,string> GetQueryInfo(Arma3Server server)
+        {
+            if (server != null)
+            {
+                SourceQuery query = new SourceQuery();
+                return query.GetServerInfo(server.QueryParams.IPAddress, server.QueryParams.Port);
+            }
+
+            return new Dictionary<string, string>();
         }
 
         private static string[] GetMissionFiles()
