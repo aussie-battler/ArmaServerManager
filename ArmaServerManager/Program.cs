@@ -29,40 +29,7 @@ namespace ArmaServerManager
 
             Arma3ServerConfigWriter.WriteConfigFile(srv1.serverData, SettingsManager.LoadSettings());
 
-            string serverDataString = ServerManager.GetServerDataByID(0);
-            Console.WriteLine(serverDataString);
-
-            File.WriteAllText("File.txt", serverDataString);*/
-
-
-             /*Arma3Server server = new Arma3Server();
-            server.ServerID = 600;
-            server.GamePort = 6666;
-            server.AdminPassword.paramValue = "esso";
-            server.AdminPassword.include = true;
-
-            server.SetArrayParameter(new string[]{"Welcome to the server", "Join us on essobäric.com"}, server.ServerMOTD);
-            server.ServerMOTD.include = true;
-
-            server.Missions.SubClasses.Add(new Arma3MissionClass("Mission_1", "A3Wasteland_v1.2.Stratis","Custom"));
-
-            Arma3ServerConfigWriter.WriteConfigFile(server, SettingsManager.LoadSettings());
-
-            SrvProcPair pair = new SrvProcPair();
-
-            string RelativePath = s.ArmaServersDataPath + "/" + server.ServerID;
-            Process p = Process.Start(s.Arma3ServerExePath, "-port="+server.GamePort + " -config="+RelativePath+"/serverconfig.cfg" + " -profiles="+RelativePath + " -name="+server.ServerProfileName+" -bepath="+s.BattlEyePath);
-
-            pair.proc = p;
-            pair.serverData = server;
-
-            Console.WriteLine("Started: {0} with settings of {1}", pair.proc.Id.ToString(), pair.serverData.ToString());
-
-            //Thread.Sleep(30000);
-
-           // pair.proc.Kill();*/
-
-            Console.Read();
+            Console.Read();*/
         }
     }
 }
