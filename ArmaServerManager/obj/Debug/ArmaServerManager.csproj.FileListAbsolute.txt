@@ -1,6 +1,0 @@
-H:\TURHAA C#PASKAAAAA\ArmaServerManager\ArmaServerManager\bin\Debug\ArmaServerManager.exe.config
-H:\TURHAA C#PASKAAAAA\ArmaServerManager\ArmaServerManager\obj\Debug\ArmaServerManager.csprojResolveAssemblyReference.cache
-H:\TURHAA C#PASKAAAAA\ArmaServerManager\ArmaServerManager\bin\Debug\ArmaServerManager.exe
-H:\TURHAA C#PASKAAAAA\ArmaServerManager\ArmaServerManager\bin\Debug\ArmaServerManager.pdb
-H:\TURHAA C#PASKAAAAA\ArmaServerManager\ArmaServerManager\obj\Debug\ArmaServerManager.exe
-H:\TURHAA C#PASKAAAAA\ArmaServerManager\ArmaServerManager\obj\Debug\ArmaServerManager.pdb
