@@ -218,6 +218,10 @@ namespace ArmaServerManager
                     }
                     return "INVALID_SERVER_ID_DATATYPE";
 
+
+                case "serverlist":
+                    return new JavaScriptSerializer().Serialize(ServerList.Select(x => new{x.serverData.ServerID, x.serverData.HostName }).ToArray());
+
                 default:
                     return "INVALID_REQUEST_TYPE";
             }

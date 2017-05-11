@@ -30,9 +30,9 @@ namespace ArmaServerManager
             srv1.serverData.Missions.SubClasses.Add(new Arma3MissionClass("Mission_1", "A3wasteland_Stratis", "Custom"));
             srv1.serverData.Missions.SubClasses.Add(new Arma3MissionClass("Mission_2", "A3wasteland_Altis", "Custom"));
             srv1.serverData.Missions.SubClasses.Add(new Arma3MissionClass("Mission_3", "ServerTestMisson", "Custom"));
-            srv1.serverData.GamePort = 2333;
-            srv1.serverData.Schedules.ServerEvents.Add(new ScheduledEvent("Test Event", DateTime.Now, EventType.START, ScheduleType.Interval, 10));
-            srv1.serverData.Schedules.ServerEvents.Add(new ScheduledEvent("Test Event2", DateTime.Now.AddSeconds(5), EventType.START, ScheduleType.Once));
+            srv1.serverData.GamePort = 2302;
+            //srv1.serverData.Schedules.ServerEvents.Add(new ScheduledEvent("Test Event", DateTime.Now, EventType.START, ScheduleType.Interval, 10));
+            //srv1.serverData.Schedules.ServerEvents.Add(new ScheduledEvent("Test Event2", DateTime.Now.AddSeconds(5), EventType.START, ScheduleType.Once));
             */
 
             while (true)
@@ -47,11 +47,9 @@ namespace ArmaServerManager
                 string val = r.ReadToEnd();
                 r.Close();
 
-
+                Console.WriteLine(val);
                 string responseString = HandleRequest(val);
 
-                
-                string serverDataString = ServerManager.GetServerDataByID(0);
                 var responseData = Encoding.ASCII.GetBytes(responseString);
 
 
