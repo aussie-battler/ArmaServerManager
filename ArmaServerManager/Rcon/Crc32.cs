@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-// Copyright (c) Damien Guard.  All rights reserved.
+﻿// Copyright (c) Damien Guard.  All rights reserved.
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. 
 // You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
 // Originally published at http://damieng.com/blog/2006/08/08/calculating_crc32_in_c_and_net
 
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Security.Cryptography;
+
+
 
 namespace ArmaServerManager.Rcon
 {

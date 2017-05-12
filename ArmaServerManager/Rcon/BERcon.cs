@@ -25,15 +25,14 @@ namespace ArmaServerManager.Rcon
 
                 if (Authenticate(rconpassword))
                 {
-                   return SendCommand(command);
+                    return SendCommand(command);
                 }
 
                 return "RCON_AUTHENTICATION_FAILED";
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
-                return "RCON_FAILED";
+                return "RCON_ERROR: " + e.Message;
             }
 
 
@@ -43,9 +42,9 @@ namespace ArmaServerManager.Rcon
         private string SendCommand(string command)
         {
             var response = SendPacket(command, COMMAND);
-            if (response.Length > 0)
+            if (response.Length > 7)
             {
-                return Encoding.ASCII.GetString(response);
+                return Encoding.ASCII.GetString(response, 9, response.Length - 9);
             }
             return "UNKOWN_RCON_ERROR";
         }

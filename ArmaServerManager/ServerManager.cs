@@ -157,7 +157,7 @@ namespace ArmaServerManager
                     try
                     {
                         FindServerByID(Convert.ToInt32(FindRequestValue(request, "serverid"))).GamePort = Convert.ToInt32(FindRequestValue(request,"paramvalue"));
-                        return "PORT_UPDATED";
+                        return "GAMEPORT_UPDATED";
                     }
                     catch (Exception)
                     {
@@ -168,21 +168,55 @@ namespace ArmaServerManager
                     try
                     {
                         FindServerByID(Convert.ToInt32(FindRequestValue(request, "serverid"))).QueryParams.Port = Convert.ToInt32(FindRequestValue(request, "paramvalue"));
-                        return "QUERYDATA_UPDATED";
+                        return "QUERY_PORT_UPDATED";
                     }
                     catch (Exception)
                     {
                         return "INVALID_PORT_OR_SERVER_ID";
                     }
+
                 case "updatequeryip":
                     try
                     {
                         FindServerByID(Convert.ToInt32(FindRequestValue(request, "serverid"))).QueryParams.IPAddress = FindRequestValue(request, "paramvalue");
-                        return "QUERYDATA_UPDATED";
+                        return "QUERY_IP_UPDATED";
                     }
                     catch (Exception)
                     {
                         return "INVALID_IP_OR_SERVER_ID";
+                    }
+
+                case "updaterconip":
+                    try
+                    {
+                        FindServerByID(Convert.ToInt32(FindRequestValue(request, "serverid"))).RconParams.IPAddress = FindRequestValue(request, "paramvalue");
+                        return "RCON_IP_UPDATED";
+                    }
+                    catch (Exception)
+                    {
+                        return "INVALID_IP_OR_SERVER_ID";
+                    }
+
+                case "updaterconport":
+                    try
+                    {
+                        FindServerByID(Convert.ToInt32(FindRequestValue(request, "serverid"))).RconParams.Port = Convert.ToInt32(FindRequestValue(request, "paramvalue"));
+                        return "RCON_PORT_UPDATED";
+                    }
+                    catch (Exception)
+                    {
+                        return "INVALID_PORT_OR_SERVER_ID";
+                    }
+
+                case "updaterconpassword":
+                    try
+                    {
+                        FindServerByID(Convert.ToInt32(FindRequestValue(request, "serverid"))).RconParams.Password = FindRequestValue(request, "paramvalue");
+                        return "RCON_PASSWORD_UPDATED";
+                    }
+                    catch (Exception)
+                    {
+                        return "INVALID_SERVERID";
                     }
 
                 case "updateprofilename":
@@ -262,6 +296,17 @@ namespace ArmaServerManager
 
                 case "serverlist":
                     return new JavaScriptSerializer().Serialize(ServerList.Select(x => new{x.serverData.ServerID, x.serverData.HostName }).ToArray());
+
+                case "sendrconcommand":
+                    try
+                    {
+                        return SendRconCommand(FindRequestValue(request,"paramvalue"), FindServerByID(Convert.ToInt32(FindRequestValue(request, "serverid"))));
+                        
+                    }
+                    catch (Exception)
+                    {
+                        return "INVALID_SERVER_ID";
+                    }
 
                 default:
                     return "INVALID_REQUEST_TYPE";
@@ -366,6 +411,12 @@ namespace ArmaServerManager
             }
 
             return missionList.ToArray();
+        }
+
+        private static string SendRconCommand(string command, Arma3Server server)
+        {
+            Rcon.BERcon rcon = new Rcon.BERcon();
+            return rcon.SendCommand(command, server.RconParams.IPAddress, server.RconParams.Port, server.RconParams.Password);
         }
 
 

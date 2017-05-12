@@ -17,6 +17,7 @@ namespace ArmaServerManager
         public string ExtraConfigLines = "";
 
         public QueryParameters QueryParams = new QueryParameters();
+        public RconParameters RconParams = new RconParameters();
 
         [NonSerialized]
         public ServerSchedule Schedules = new ServerSchedule();

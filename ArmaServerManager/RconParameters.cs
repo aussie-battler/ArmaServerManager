@@ -9,8 +9,8 @@ namespace ArmaServerManager
     [Serializable]
     public class RconParameters
     {
-        public string IPAddress;
-        public int Port;
-        public string Password;
+        public string IPAddress { get; set; }
+        public int Port { get; set; }
+        public string Password { get; set; }
     }
 }
