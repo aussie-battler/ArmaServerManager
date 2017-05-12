@@ -28,6 +28,7 @@ namespace ArmaServerManager
             try
             {
                 spp.proc.Kill();
+                spp.proc.WaitForExit();
 
             }
             catch (Exception)
@@ -49,9 +50,9 @@ namespace ArmaServerManager
                 spp.proc = p;
                 return "SERVER_START_SUCCEEDED";
             }
-            catch (Exception)
+            catch (Exception e )
             {
-                Console.WriteLine("Error: Failed to start server");
+                Console.WriteLine("Error: Failed to start server {0}",e.Message);
                 return "SERVER_START_FAILED";
             }
 
@@ -115,7 +116,7 @@ namespace ArmaServerManager
             param.paramValue = value;
             SaveServerList();
 
-            return "PARAMETER_UPDATE_SUCCEEDED";
+            return "PARAMETER_UPDATED";
 
         }
 
@@ -132,7 +133,7 @@ namespace ArmaServerManager
             param.include = state;
             SaveServerList();
 
-            return "PARAMETER_STATE_UPDATE_SUCCEEDED";
+            return "PARAMETER_UPDATED";
         }
 
         public static string HandleRequest(List<string[]> request)
@@ -167,7 +168,7 @@ namespace ArmaServerManager
                     try
                     {
                         FindServerByID(Convert.ToInt32(FindRequestValue(request, "serverid"))).QueryParams.Port = Convert.ToInt32(FindRequestValue(request, "paramvalue"));
-                        return "QUERY_PORT_UPDATED";
+                        return "QUERYDATA_UPDATED";
                     }
                     catch (Exception)
                     {
@@ -177,7 +178,7 @@ namespace ArmaServerManager
                     try
                     {
                         FindServerByID(Convert.ToInt32(FindRequestValue(request, "serverid"))).QueryParams.IPAddress = FindRequestValue(request, "paramvalue");
-                        return "QUERY_IP_UPDATED";
+                        return "QUERYDATA_UPDATED";
                     }
                     catch (Exception)
                     {
@@ -207,7 +208,11 @@ namespace ArmaServerManager
 
                 case "serverinfo":
                     if (int.TryParse(FindRequestValue(request, "serverid"), out id))
-                        return ServerManager.GetServerDataByID(id);
+                    {
+                        string serverdata = ServerManager.GetServerDataByID(id);
+                        if (serverdata.Length > 0) return serverdata;
+                        return "SERVER_NOT_FOUND_WITH_ID_" + id;
+                    }
                     return "INVALID_SERVER_ID_DATATYPE";
 
                 case "queryinfo":
@@ -231,6 +236,10 @@ namespace ArmaServerManager
 
                 case "getmissionfiles":
                     return new JavaScriptSerializer().Serialize(ServerManager.GetMissionFiles());
+
+                case "addnewserver":
+                    ServerManager.CreateNewServer();
+                    return "NEW_SERVER_CREATED";
 
                 case "addmissiontocycle":
                     if (int.TryParse(FindRequestValue(request, "serverid"), out id))

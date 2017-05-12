@@ -56,6 +56,7 @@ namespace ArmaServerManager
                 response.ContentLength64 = responseData.Length;
                 response.Headers.Add("Access-Control-Allow-Origin", "*");
                 response.Headers.Add("Access-Control-Allow-Methods", "POST, GET");
+                response.ContentEncoding = Encoding.UTF8;
 
 
                 Stream outputStream = response.OutputStream;
