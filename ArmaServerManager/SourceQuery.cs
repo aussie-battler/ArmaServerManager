@@ -31,11 +31,16 @@ namespace ArmaServerManager
                 client.Close();
                 return serverInfo;
             }
-            catch (SocketException e)
+            catch (ArgumentNullException e)
+            {
+                Console.WriteLine("Parameter was null: {0}", e.ParamName);
+                return new Dictionary<string, string>();
+            }
+            catch (Exception e)
             {
                 Console.WriteLine(e.Message);
+                return new Dictionary<string, string>();
             }
-            return new Dictionary<string, string>();
         }
 
         private void A2S_INFO_RECEIVE()

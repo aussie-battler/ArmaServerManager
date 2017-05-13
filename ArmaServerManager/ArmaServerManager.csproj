@@ -57,6 +57,7 @@
     <Compile Include="RconParameters.cs" />
     <Compile Include="Rcon\BERcon.cs" />
     <Compile Include="Rcon\Crc32.cs" />
+    <Compile Include="Rcon\Player.cs" />
     <Compile Include="ServerListStorageObject.cs" />
     <Compile Include="ServerSchedule.cs" />
     <Compile Include="Settings.cs" />

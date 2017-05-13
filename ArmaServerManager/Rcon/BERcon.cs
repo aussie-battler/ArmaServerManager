@@ -30,6 +30,10 @@ namespace ArmaServerManager.Rcon
 
                 return "RCON_AUTHENTICATION_FAILED";
             }
+            catch (ArgumentNullException e)
+            {
+                return "Rcon failed: Argument was not defined: " + e.ParamName;
+            }
             catch (Exception e)
             {
                 return "RCON_ERROR: " + e.Message;
@@ -42,8 +46,29 @@ namespace ArmaServerManager.Rcon
         private string SendCommand(string command)
         {
             var response = SendPacket(command, COMMAND);
+
+            Console.WriteLine("Received HexArray:");
+            int i = 1;
+            foreach (var item in response)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.Write("[");
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.Write("{0:X}", item);
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.Write(", {0}", Encoding.ASCII.GetString(new byte[]{item}));
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.Write("]");
+
+                if (i % 8 == 0)
+                    Console.WriteLine();
+                i++;
+            }
+            Console.WriteLine();
+
             if (response.Length > 7)
             {
+                GetPlayerData(response);
                 return Encoding.ASCII.GetString(response, 9, response.Length - 9);
             }
             return "UNKOWN_RCON_ERROR";
@@ -80,6 +105,43 @@ namespace ArmaServerManager.Rcon
             bytes.AddRange(new byte[]{0x42,0x45});
             bytes.AddRange(BitConverter.GetBytes((int)Crc32.Compute(subsequentBytes)));
             return bytes.ToArray();
+        }
+
+
+
+
+
+        public static Player[] GetPlayerData(byte[] data)
+        {
+            List<Player> playerList = new List<Player>();
+            try
+            {
+                //Remove useless characters from playersdata.
+                string stringData = Encoding.ASCII.GetString(data);
+                stringData = stringData.Substring(115);
+                stringData = stringData.Substring(0, stringData.LastIndexOf(Convert.ToChar(0xA)));
+
+                //Players are separated with 0x0A (line-feed)
+                var players = stringData.Split(Convert.ToChar(0xA));
+
+                foreach (var player in players)
+                {
+                    try
+                    {
+                        var dataParts = player.Split(new char[] { Convert.ToChar(0x20) }, StringSplitOptions.RemoveEmptyEntries);
+
+                        //Combine last parts because player might have space in name.
+                        for (int i = 5; i < dataParts.Length; i++) dataParts[4] += " " + dataParts[i];
+                        playerList.Add(new Player(Convert.ToInt32(dataParts[0]), dataParts[1], Convert.ToInt32(dataParts[2]), dataParts[3], dataParts[4]));
+                    }
+                    catch{}
+                }
+                return playerList.ToArray();
+            }
+            catch
+            {
+                return playerList.ToArray();
+            }
         }
     }
 }
