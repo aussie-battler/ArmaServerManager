@@ -43,10 +43,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Arma3ClassObject.cs" />
-    <Compile Include="Arma3MissionClass.cs" />
-    <Compile Include="Arma3Server.cs" />
-    <Compile Include="Arma3ServerConfigWriter.cs" />
+    <Compile Include="A3S\Arma3ClassObject.cs" />
+    <Compile Include="A3S\Arma3MissionClass.cs" />
+    <Compile Include="A3S\Arma3Server.cs" />
+    <Compile Include="A3S\Arma3ServerConfigWriter.cs" />
+    <Compile Include="A3S\SrvParam.cs" />
+    <Compile Include="A3S\SrvProcPair.cs" />
+    <Compile Include="A3S\RequestHandler.cs" />
     <Compile Include="HttpServer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -55,13 +58,12 @@
     <Compile Include="Rcon\BERcon.cs" />
     <Compile Include="Rcon\Crc32.cs" />
     <Compile Include="ServerListStorageObject.cs" />
-    <Compile Include="ServerManager.cs" />
     <Compile Include="ServerSchedule.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="SettingsManager.cs" />
     <Compile Include="SourceQuery.cs" />
-    <Compile Include="SrvParam.cs" />
-    <Compile Include="SrvProcPair.cs" />
+    <Compile Include="A3S\Arma3ServerData.cs" />
+    <Compile Include="A3S\Arma3ServerUtility.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

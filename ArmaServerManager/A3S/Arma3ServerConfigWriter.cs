@@ -7,7 +7,7 @@ using System.IO;
 using System.Threading;
 using System.Globalization;
 
-namespace ArmaServerManager
+namespace ArmaServerManager.A3S
 {
     public static class Arma3ServerConfigWriter
     {

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.IO;
 using System.Web;
+using ArmaServerManager.A3S;
 
 namespace ArmaServerManager
 {
@@ -56,7 +57,7 @@ namespace ArmaServerManager
                 Stream outputStream = response.OutputStream;
                 outputStream.Write(responseData, 0, responseData.Length);
                 outputStream.Close();
-                ServerManager.SaveServerList();
+                Arma3ServerUtility.SaveServerList();
             }
         }
 
@@ -84,7 +85,7 @@ namespace ArmaServerManager
             if (!passwordOK)
                 return "ACCESS_DENIED";
 
-            return ServerManager.HandleRequest(requests);
+            return RequestHandler.HandleRequest(requests);
         }
     }
 }

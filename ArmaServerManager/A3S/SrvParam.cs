@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace ArmaServerManager
+namespace ArmaServerManager.A3S
 {
     [Serializable]
     public class SrvParam

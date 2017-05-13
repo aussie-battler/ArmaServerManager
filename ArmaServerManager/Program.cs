@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Threading;
 using System.IO;
+using ArmaServerManager.A3S;
 
 namespace ArmaServerManager
 {
@@ -15,8 +16,8 @@ namespace ArmaServerManager
 
         public static void Main(string[] args)
         {
-
-            ServerManager.LoadServerList();
+            Arma3ServerUtility.LoadServerList();
+            
             HttpServer s = new HttpServer(SettingsManager.LoadSettings());
             s.Listen();
 

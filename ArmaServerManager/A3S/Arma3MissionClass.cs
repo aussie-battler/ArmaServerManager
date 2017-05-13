@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ArmaServerManager
+namespace ArmaServerManager.A3S
 {
     [Serializable]
     class Arma3MissionClass : Arma3ClassObject

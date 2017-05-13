@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ArmaServerManager
+namespace ArmaServerManager.A3S
 {
     [Serializable]
     public class Arma3ClassObject
@@ -19,9 +19,9 @@ namespace ArmaServerManager
             ClassName = name;
         }
 
-        public void RemoveSubclassesByName(string name)
+        public int RemoveSubclassesByName(string name)
         {
-            this.SubClasses.RemoveAll(x => x.ClassName == name);
+            return this.SubClasses.RemoveAll(x => x.ClassName == name);
         }
     }
 }

@@ -19,13 +19,13 @@ namespace ArmaServerManager
         //A2S_INFO FUNCTIONS
         public Dictionary<string, string> GetServerInfo(string ip, int port)
         {
-            serverInfo.Clear();
-            client = new UdpClient();
-            ep = new IPEndPoint(IPAddress.Parse(ip), port);
-            client.Client.ReceiveTimeout = 250;
-            client.Client.SendTimeout = 250;
             try
             {
+                serverInfo.Clear();
+                client = new UdpClient();
+                ep = new IPEndPoint(IPAddress.Parse(ip), port);
+                client.Client.ReceiveTimeout = 250;
+                client.Client.SendTimeout = 250;
                 client.Connect(ep);
                 A2S_INFO_RECEIVE();
                 client.Close();

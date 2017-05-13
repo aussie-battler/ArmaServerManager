@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
 
-namespace ArmaServerManager
+namespace ArmaServerManager.A3S
 {
     [Serializable]
     public class ServerListStorageObject
