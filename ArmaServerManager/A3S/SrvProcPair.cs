@@ -7,10 +7,10 @@ using System.Diagnostics;
 
 namespace ArmaServerManager.A3S
 {
-    [Serializable]
     public class SrvProcPair
     {
         public Process proc;
         public Arma3Server serverData;
+        public Rcon.Rcon RemoteConsole;
     };
 }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 using System.IO;
+using System.Diagnostics;
 
 namespace ArmaServerManager.A3S
 {
@@ -183,13 +184,119 @@ namespace ArmaServerManager.A3S
         private static string SendRconCommand(List<string[]> request, int serverID)
         {
             Arma3Server server = Arma3ServerUtility.FindArma3ServerByID(serverID);
+            SrvProcPair serverProcessPair = Arma3ServerUtility.FindServerProcessPairByID(serverID);
             if (server == null) return "Server with id " + serverID + " not found";
+            if (serverProcessPair == null) return "Failed to find running server process";
 
             string param;
             if (!FindRequestValue(request, "paramvalue", out param)) return "ParameterValue not found";
 
-            Rcon.BERcon rcon = new Rcon.BERcon();
-            return rcon.SendCommand(param, server.RconParams.IPAddress, server.RconParams.Port, server.RconParams.Password);
+            if (serverProcessPair.RemoteConsole == null) return "Failed to send command. Rcon not initialized";
+            if (!serverProcessPair.RemoteConsole.RconEnabled) return "Failed to send command. Rcon is not enabled";
+
+            serverProcessPair.RemoteConsole.Send(param);
+
+            return "Rcon command-request sent";
+        }
+
+        //Initialize new Rcon connection to server.
+        private static string StartRcon(int serverID)
+        {
+            Arma3Server server = Arma3ServerUtility.FindArma3ServerByID(serverID);
+            SrvProcPair serverProcessPair = Arma3ServerUtility.FindServerProcessPairByID(serverID);
+            if (server == null) return "Server with id " + serverID + " not found";
+            if (serverProcessPair == null) return "Failed to find running server process";
+
+            try
+            {
+                if (serverProcessPair.RemoteConsole == null) serverProcessPair.RemoteConsole = new Rcon.Rcon(server.RconParams.IPAddress, server.RconParams.Port, server.RconParams.Password);
+                serverProcessPair.RemoteConsole.SetRconEnabled(true);
+
+                if(serverProcessPair.RemoteConsole.RconEnabled) return "Rcon Started";
+                return "Failed to start Rcon";
+            }
+            catch (Exception e)
+            {
+                return "Failed to initialize Rcon Conncetion: " + e.Message;
+            }
+        }
+
+        //Stop Rcon connection.
+        private static string StopRcon(int serverID)
+        {
+            Arma3Server server = Arma3ServerUtility.FindArma3ServerByID(serverID);
+            SrvProcPair serverProcessPair = Arma3ServerUtility.FindServerProcessPairByID(serverID);
+            if (server == null) return "Server with id " + serverID + " not found";
+            if (serverProcessPair == null) return "Failed to find running server process";
+
+            if (serverProcessPair.RemoteConsole != null)
+            {
+                serverProcessPair.RemoteConsole.SetRconEnabled(false);
+            }
+
+            return "Rcon is stopped";
+        }
+
+        //Get Rcon Data
+        private static string GetRconData(int serverID)
+        {
+            Arma3Server server = Arma3ServerUtility.FindArma3ServerByID(serverID);
+            SrvProcPair serverProcessPair = Arma3ServerUtility.FindServerProcessPairByID(serverID);
+            if (server == null) return "Server with id " + serverID + " not found";
+            if (serverProcessPair == null) return "Failed to find running server process";
+
+            if (serverProcessPair.RemoteConsole == null) return "Failed to get data. Rcon is not enabled";
+
+            return new JavaScriptSerializer().Serialize(serverProcessPair.RemoteConsole.Handler.Data);
+        }
+
+        //Update generic settings from this application.
+        private static string UpdateGeneralSettings(List<string[]> request)
+        {
+
+
+            string managerport, serverexe, bepath, serverdatapath, password, missionpath;
+            if (!FindRequestValue(request, "managerport", out managerport)) return "ManagerPort not found";
+            if (!FindRequestValue(request, "bepath", out bepath)) return "BattlEye path not found";
+            if (!FindRequestValue(request, "serverexe", out serverexe)) return "Arma3Server exe path not found";
+            if (!FindRequestValue(request, "serverdatapath", out serverdatapath)) return "Server Data path not found";
+            if (!FindRequestValue(request, "password", out password)) return "Password not found";
+            if (!FindRequestValue(request, "missionpath", out missionpath)) return "Mission folder path not found";
+
+            int p;
+            if (!int.TryParse(managerport, out p)) return "Port is not integer type";
+
+            appSettings.Arma3ServerExePath = serverexe;
+            appSettings.ArmaServersDataPath = serverdatapath;
+            appSettings.BattlEyePath = bepath;
+            appSettings.ManagerPort = p;
+            appSettings.MissionPath = missionpath;
+            appSettings.Password = password;
+
+            return "Settings updated";
+        }
+
+        //Save current settings and restart application.
+        private static string RestartWrapper()
+        {
+            try
+            {
+                SettingsManager.SaveSettings(appSettings);
+                Process.Start("restart.exe", Process.GetCurrentProcess().Id.ToString());
+                Environment.Exit(0);
+            }
+            catch
+            {
+            }
+            
+            
+            return "";
+        }
+
+        //Convert application settings to json.
+        private static string GetGeneralSettings()
+        {
+            return new JavaScriptSerializer().Serialize(appSettings);
         }
 
 
@@ -202,7 +309,10 @@ namespace ArmaServerManager.A3S
             int serverID = -1;
 
             if (FindRequestValue(request, "serverid", out sid))
-                int.TryParse(sid, out serverID);
+            {
+                if(sid.Length > 0)
+                    int.TryParse(sid, out serverID);
+            }
 
             switch (requestName)
             {
@@ -266,6 +376,24 @@ namespace ArmaServerManager.A3S
 
                 case "sendrconcommand":
                     return SendRconCommand(request, serverID);
+
+                case "startrcon":
+                    return StartRcon(serverID);
+
+                case "stoprcon":
+                    return StopRcon(serverID);
+
+                case "getrcondata":
+                    return GetRconData(serverID);
+
+                case "updatesettings":
+                    return UpdateGeneralSettings(request);
+
+                case "restartwrapper":
+                    return RestartWrapper();
+
+                case "getwrappersettings":
+                    return GetGeneralSettings();
 
                 default:
                     return "That kind of request doesn't exists!";

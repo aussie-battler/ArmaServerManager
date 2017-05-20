@@ -9,7 +9,7 @@ namespace ArmaServerManager
 {
     public class ServerSchedule
     {
-        public bool Enabled = true;
+        public bool Enabled = false;
         public List<ScheduledEvent> ServerEvents = new List<ScheduledEvent>();
 
         private Timer timer = new Timer();
@@ -92,8 +92,9 @@ namespace ArmaServerManager
         public ScheduleType Scheduletype;
         public DateTime LastExec;
         public int Interval;
+        public string MessageToServer;
 
-        public ScheduledEvent(string desc, DateTime date, EventType evttype, ScheduleType scheduletype, int interval = 99999)
+        public ScheduledEvent(string desc, string msg, DateTime date, EventType evttype, ScheduleType scheduletype, int interval = 99999)
         {
             Description = desc;
             EvtDate = date;
@@ -101,6 +102,7 @@ namespace ArmaServerManager
             Scheduletype = scheduletype;
             LastExec = DateTime.Now;
             Interval = interval;
+            MessageToServer = msg;
         }
     }
 
