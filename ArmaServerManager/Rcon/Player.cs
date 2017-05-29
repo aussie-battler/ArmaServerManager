@@ -9,12 +9,6 @@ namespace ArmaServerManager.Rcon
     [Serializable]
     public class Player
     {
-        private int p1;
-        private char p2;
-        private int p3;
-        private char p4;
-        private char p5;
-
         public int ID { get; set; }
         public string PlayerName { get; set; }
         public string IPAddress { get; set; }

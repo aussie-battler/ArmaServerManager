@@ -10,6 +10,7 @@ namespace ArmaServerManager
     public class ServerSchedule
     {
         public bool Enabled = false;
+
         public List<ScheduledEvent> ServerEvents = new List<ScheduledEvent>();
 
         private Timer timer = new Timer();

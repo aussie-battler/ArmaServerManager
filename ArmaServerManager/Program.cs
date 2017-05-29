@@ -37,16 +37,6 @@ namespace ArmaServerManager
             
             HttpServer s = new HttpServer(SettingsManager.LoadSettings());
             s.Listen();
-
-
-
-            /*SrvProcPair srv1 = ServerManager.CreateNewServer();
-
-            srv1.serverData.InsertSubClass(srv1.serverData.Missions, new Arma3MissionClass("Mission_1", "A3wasteland_stratis", "Custom"));
-
-            Arma3ServerConfigWriter.WriteConfigFile(srv1.serverData, SettingsManager.LoadSettings());
-
-            */
         }
     }
 }

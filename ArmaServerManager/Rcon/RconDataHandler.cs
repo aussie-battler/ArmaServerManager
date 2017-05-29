@@ -44,6 +44,7 @@ namespace ArmaServerManager.Rcon
                     {
                         case "players":
                             Data.PlayerList = new List<Player>(GetPlayerData(p.data));
+                            //Data.RconLogs.Add(p.ToString());
                             break;
                         default:
                             if (p.type == PacketType.ServerMessage_Packet) Data.ServerMessages.Add(p.ToString());

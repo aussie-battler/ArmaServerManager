@@ -260,7 +260,7 @@ namespace ArmaServerManager.A3S
             if (!FindRequestValue(request, "bepath", out bepath)) return "BattlEye path not found";
             if (!FindRequestValue(request, "serverexe", out serverexe)) return "Arma3Server exe path not found";
             if (!FindRequestValue(request, "serverdatapath", out serverdatapath)) return "Server Data path not found";
-            if (!FindRequestValue(request, "password", out password)) return "Password not found";
+            if (!FindRequestValue(request, "app_password", out password)) return "Password not found";
             if (!FindRequestValue(request, "missionpath", out missionpath)) return "Mission folder path not found";
 
             int p;
@@ -298,6 +298,65 @@ namespace ArmaServerManager.A3S
         {
             return new JavaScriptSerializer().Serialize(appSettings);
         }
+
+        //Get list of scheduled events from the server and return as a JSON.
+        private static string GetServerSchedules(int serverID)
+        {
+            Arma3Server server = Arma3ServerUtility.FindArma3ServerByID(serverID);
+            if (server == null) return "Server with id " + serverID + " not found";
+
+            return new JavaScriptSerializer().Serialize(server.Schedules.ServerEvents);
+        }
+
+        //Add new scheduled event to server.
+        private static string AddServerScheduledEvent(List<string[]> request, int serverID)
+        {
+            Arma3Server server = Arma3ServerUtility.FindArma3ServerByID(serverID);
+            if (server == null) return "Server with id " + serverID + " not found";
+
+            string description, eventType, scheduleType, date, interval;
+
+            if (!FindRequestValue(request, "description", out description)) return "Event Description not found";
+            if (!FindRequestValue(request, "eventtype", out eventType)) return "Event Action not found";
+            if (!FindRequestValue(request, "scheduletype", out scheduleType)) return "Event Repeat type not found";
+            if (!FindRequestValue(request, "date", out date)) return "Event date not found";
+            if (!FindRequestValue(request, "interval", out interval)) return "Event repeat interval not found";
+
+            EventType evtType = String2EventType(eventType);
+            ScheduleType evtScType = String2ScheduleType(scheduleType);
+            DateTime evtDate = String2DateTime(date);
+            int evtInterval = 0;
+
+            int.TryParse(interval, out evtInterval);
+
+            server.Schedules.ServerEvents.Add( new ScheduledEvent(description,"",evtDate, evtType, evtScType, evtInterval));
+            return "Added new scheduled event";
+        }
+
+        //Toggle schedules on/off
+        private static string ToggleScheduleEnabled(int serverID)
+        {
+            Arma3Server server = Arma3ServerUtility.FindArma3ServerByID(serverID);
+            if (server == null) return "Server with id " + serverID + " not found";
+
+            server.Schedules.Enabled = !server.Schedules.Enabled;
+
+            return "Server Scheduling set to " + server.Schedules.Enabled.ToString();
+        }
+
+        //Get schedules state
+        private static string GetSchedulesEnabled(int serverID)
+        {
+            Arma3Server server = Arma3ServerUtility.FindArma3ServerByID(serverID);
+            if (server == null) return "Server with id " + serverID + " not found";
+
+            return server.Schedules.Enabled.ToString();
+        }
+
+
+
+
+
 
 
         public static string HandleRequest(List<string[]> request)
@@ -395,6 +454,18 @@ namespace ArmaServerManager.A3S
                 case "getwrappersettings":
                     return GetGeneralSettings();
 
+                case "getschedules":
+                    return GetServerSchedules(serverID);
+
+                case "addscheduledevent":
+                    return AddServerScheduledEvent(request, serverID);
+
+                case "toggleschedules":
+                    return ToggleScheduleEnabled(serverID);
+
+                case "getschedulesstate":
+                    return GetSchedulesEnabled(serverID);
+
                 default:
                     return "That kind of request doesn't exists!";
             }
@@ -404,10 +475,18 @@ namespace ArmaServerManager.A3S
         //Find requestname from received requestString pair.
         public static bool FindRequestValue(List<string[]> requestArray, string requestName, out string value)
         {
-            value = requestArray.Find(x => x[0] == requestName)[1];
-            if (value != null) return true;
+            var found = requestArray.Find(x => x[0] == requestName);
+            if (found != null)
+            {
+                value = found[1];
+                return true;
+            }
+            else
+            {
+                value = null;
+                return false;
+            }
 
-            return false;
         }
 
         //Find all mission files in MPMissions folder.
@@ -425,6 +504,32 @@ namespace ArmaServerManager.A3S
             }
 
             return missionList.ToArray();
+        }
+
+
+        private static EventType String2EventType(string s)
+        {
+            foreach (EventType et in Enum.GetValues(typeof(EventType)))
+                if (et.ToString() == s)
+                    return et;
+
+            return EventType.STOP;
+        }
+
+        private static ScheduleType String2ScheduleType(string s)
+        {
+            foreach (ScheduleType st in Enum.GetValues(typeof(ScheduleType)))
+                if (st.ToString() == s)
+                    return st;
+
+            return ScheduleType.Once;
+        }
+
+        private static DateTime String2DateTime(string s)
+        {
+            DateTime date;
+            DateTime.TryParseExact(s, "yyyy-MM-dd HH:mm", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date);
+            return date;
         }
     }
 }
