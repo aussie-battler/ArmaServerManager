@@ -28,7 +28,7 @@ namespace ArmaServerManager
             timer.AutoReset = true;
             timer.Elapsed += timer_Elapsed;
             timer.Start();
-            timer.Interval = 500;
+            timer.Interval = 500; 
         }
 
         private void timer_Elapsed(object sender, ElapsedEventArgs e)

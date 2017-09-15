@@ -9,7 +9,7 @@ using System.Timers;
 
 namespace ArmaServerManager.Rcon
 {
-    public class Rcon
+    public class Rcon 
     {
         public bool RconEnabled { get; private set; }
         public IPAddress IpAddress { get; private set; }

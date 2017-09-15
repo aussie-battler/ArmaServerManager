@@ -12,7 +12,7 @@ namespace ArmaServerManager
 {
     public class HttpServer
     {
-        private Settings settings;
+        private Settings settings; 
 
         public HttpServer(Settings s)
         {

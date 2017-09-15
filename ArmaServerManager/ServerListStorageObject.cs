@@ -26,4 +26,4 @@ namespace ArmaServerManager.A3S
             Events = evts;
         }
     }
-}
+} 

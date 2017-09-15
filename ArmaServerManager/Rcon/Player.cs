@@ -24,4 +24,4 @@ namespace ArmaServerManager.Rcon
             BEGuid = guid;
         }
     }
-}
+} 

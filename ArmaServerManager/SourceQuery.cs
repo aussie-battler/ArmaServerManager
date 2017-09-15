@@ -370,4 +370,4 @@ namespace ArmaServerManager
             return -1;//Null terminaattoria ei löytynyt
         }
     }
-}
+} 

@@ -7,7 +7,7 @@ using System.Timers;
 
 namespace ArmaServerManager.Rcon
 {
-    public class RconDataHandler
+    public class RconDataHandler 
     {
         private List<RconPacket> multiPackets = new List<RconPacket>();
         private Timer PacketTimer;

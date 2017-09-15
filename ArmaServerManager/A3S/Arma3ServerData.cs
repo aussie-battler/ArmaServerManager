@@ -7,7 +7,7 @@ using System.Diagnostics;
 using System.Web.Script.Serialization;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-
+ 
 namespace ArmaServerManager.A3S
 {
     public class Arma3ServerData
